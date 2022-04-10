@@ -1,12 +1,15 @@
 package com.ardemo
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.scale
 import androidx.lifecycle.lifecycleScope
 import com.ardemo.databinding.ActivityMainBinding
 import dev.romainguy.kotlin.math.Float3
+import io.github.sceneview.ar.arcore.ArFrame
 import io.github.sceneview.ar.node.ArModelNode
 import io.github.sceneview.ar.node.PlacementMode.INSTANT
 
@@ -14,9 +17,14 @@ class MainActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivityMainBinding
 
+  //inject
   private lateinit var modelNode: ArModelNode
 
+  //view model
   private var isObjectPresent = false
+
+  //view model
+  private var isPlaneDetected = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -40,37 +48,66 @@ class MainActivity : AppCompatActivity() {
     }
 
     binding.sceneView.onArFrame = { arFrame ->
-      if (arFrame.session.isTrackingPlane) {
+      processFrame(arFrame)
+    }
+
+    binding.objectButton.setOnClickListener(::objectButtonClicked)
+
+    binding.colorButton.setOnClickListener(::colorButtonClicked)
+  }
+
+  private fun processFrame(frame: ArFrame) {
+    when (frame.updatedTrackables.isNotEmpty()) {
+      true -> {
         binding.objectButton.visibility = View.VISIBLE
+        isPlaneDetected = true
+        binding.planeIndicator.setBackgroundColor(Color.GREEN)
+      }
+      false -> {
+        isPlaneDetected = false
+        binding.planeIndicator.setBackgroundColor(Color.RED)
       }
     }
+  }
 
-    binding.objectButton.setOnClickListener {
-      if (isObjectPresent) {
-        binding.sceneView.removeChild(modelNode)
-        modelNode.destroy()
-        binding.objectButton.text = "Place the object"
-        isObjectPresent = false
-      } else {
-        binding.sceneView.addChild(modelNode)
-        modelNode.anchor()
-        binding.objectButton.text = "Remove"
-        isObjectPresent = true
+  private fun objectButtonClicked(button: View) {
+    when (isObjectPresent) {
+      true -> removeObject()
+      false -> placeObject()
+    }
+  }
+
+  private fun placeObject() {
+    if (isPlaneDetected) {
+      binding.sceneView.addChild(modelNode)
+      modelNode.anchor()
+      binding.objectButton.text = "Remove"
+      isObjectPresent = true
+    } else {
+      Toast
+        .makeText(applicationContext, "Touch plane on the screen to help detect it.", Toast.LENGTH_LONG)
+        .show()
+    }
+  }
+
+  private fun removeObject() {
+    binding.sceneView.removeChild(modelNode)
+    modelNode.destroy()
+    binding.objectButton.text = "Place the object"
+    isObjectPresent = false
+  }
+
+  private fun colorButtonClicked(button: View) {
+    ViewCopier.copyViewToBitmap(
+      view = binding.sceneView,
+      onSuccess = { bitmap ->
+        val color = bitmap.scale(1, 1).getColor(0, 0).toArgb()
+        button.setBackgroundColor(color)
+      },
+      onError = {
+        //todo
       }
-    }
-
-    binding.colorButton.setOnClickListener {
-      ViewCopier.copyViewToBitmap(
-        view = binding.sceneView,
-        onSuccess = { bitmap ->
-          val color = bitmap.scale(1, 1).getColor(0, 0).toArgb()
-          it.setBackgroundColor(color)
-        },
-        onError = {
-          //todo
-        }
-      )
-    }
+    )
   }
 
 }
