@@ -1,6 +1,5 @@
 package com.ardemo
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -28,10 +27,8 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
   @Inject
   lateinit var viewCopier: ViewCopier
 
-  //view model
   private var isObjectPresent = false
 
-  //view model
   private var isPlaneDetected = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,11 +62,11 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
       true -> {
         binding.objectButton.visibility = View.VISIBLE
         isPlaneDetected = true
-        binding.planeIndicator.setBackgroundColor(Color.GREEN)
+        binding.planeIndicator.setImageResource(resources.green())
       }
       false -> {
         isPlaneDetected = false
-        binding.planeIndicator.setBackgroundColor(Color.RED)
+        binding.planeIndicator.setImageResource(resources.red())
       }
     }
   }

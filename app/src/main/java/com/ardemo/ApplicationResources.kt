@@ -1,6 +1,7 @@
 package com.ardemo
 
 import android.content.res.Resources
+import androidx.annotation.ColorRes
 import dagger.Reusable
 
 @Reusable
@@ -17,5 +18,12 @@ class ApplicationResources constructor(
   fun removeButtonText(): String =
     resources.getString(R.string.remove_button)
 
+  @ColorRes
+  fun green(): Int =
+    R.color.green
+
+  @ColorRes
+  fun red(): Int =
+    R.color.red
 }
 
