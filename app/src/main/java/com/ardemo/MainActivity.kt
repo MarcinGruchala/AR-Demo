@@ -4,21 +4,31 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.scale
 import androidx.lifecycle.lifecycleScope
 import com.ardemo.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 import dev.romainguy.kotlin.math.Float3
 import io.github.sceneview.ar.arcore.ArFrame
 import io.github.sceneview.ar.node.ArModelNode
 import io.github.sceneview.ar.node.PlacementMode.INSTANT
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivityMainBinding
 
-  //inject
-  private lateinit var modelNode: ArModelNode
+  @Inject
+  lateinit var modelNode: ArModelNode
+
+  @Inject
+  lateinit var resources: ApplicationResources
+
+  @Inject
+  lateinit var viewCopier: ViewCopier
 
   //view model
   private var isObjectPresent = false
@@ -30,8 +40,6 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
-
-    modelNode = ArModelNode(placementMode = INSTANT)
 
     lifecycleScope.launchWhenStarted {
       modelNode.apply {
@@ -81,11 +89,12 @@ class MainActivity : AppCompatActivity() {
     if (isPlaneDetected) {
       binding.sceneView.addChild(modelNode)
       modelNode.anchor()
-      binding.objectButton.text = "Remove"
+      binding.objectButton.text = resources.removeButtonText()
       isObjectPresent = true
     } else {
       Toast
-        .makeText(applicationContext, "Touch plane on the screen to help detect it.", Toast.LENGTH_LONG)
+        .makeText(applicationContext, resources.noPlaneMessage(),
+          Toast.LENGTH_LONG)
         .show()
     }
   }
@@ -93,12 +102,12 @@ class MainActivity : AppCompatActivity() {
   private fun removeObject() {
     binding.sceneView.removeChild(modelNode)
     modelNode.destroy()
-    binding.objectButton.text = "Place the object"
+    binding.objectButton.text = resources.placeObjectButton()
     isObjectPresent = false
   }
 
   private fun colorButtonClicked(button: View) {
-    ViewCopier.copyViewToBitmap(
+    viewCopier.copyViewToBitmap(
       view = binding.sceneView,
       onSuccess = { bitmap ->
         val color = bitmap.scale(1, 1).getColor(0, 0).toArgb()

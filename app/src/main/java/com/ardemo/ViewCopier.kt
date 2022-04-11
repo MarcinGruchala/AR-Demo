@@ -6,13 +6,15 @@ import android.os.HandlerThread
 import android.view.PixelCopy
 import android.view.SurfaceView
 import android.view.View
+import javax.inject.Singleton
 
-object ViewCopier {
+@Singleton
+class ViewCopier {
 
   fun copyViewToBitmap(view: View, onSuccess: (bitmap: Bitmap) -> Unit, onError: () -> Unit) {
     val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
 
-    val handlerThread = HandlerThread("Helper")
+    val handlerThread = HandlerThread("helperThread")
     handlerThread.start()
 
     PixelCopy.request(
