@@ -4,8 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.scale
 import androidx.lifecycle.lifecycleScope
 import com.ardemo.databinding.ActivityMainBinding
@@ -13,13 +11,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.romainguy.kotlin.math.Float3
 import io.github.sceneview.ar.arcore.ArFrame
 import io.github.sceneview.ar.node.ArModelNode
-import io.github.sceneview.ar.node.PlacementMode.INSTANT
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
 
-  private lateinit var binding: ActivityMainBinding
+  override val layoutRes: Int =
+    R.layout.activity_main
 
   @Inject
   lateinit var modelNode: ArModelNode
@@ -38,8 +36,6 @@ class MainActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    binding = ActivityMainBinding.inflate(layoutInflater)
-    setContentView(binding.root)
 
     lifecycleScope.launchWhenStarted {
       modelNode.apply {
