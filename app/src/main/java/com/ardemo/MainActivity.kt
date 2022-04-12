@@ -1,48 +1,49 @@
 package com.ardemo
 
-import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.scale
 import androidx.lifecycle.lifecycleScope
 import com.ardemo.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 import dev.romainguy.kotlin.math.Float3
 import io.github.sceneview.ar.arcore.ArFrame
 import io.github.sceneview.ar.node.ArModelNode
-import io.github.sceneview.ar.node.PlacementMode.INSTANT
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
 
-  private lateinit var binding: ActivityMainBinding
+  override val layoutRes: Int =
+    R.layout.activity_main
 
-  //inject
-  private lateinit var modelNode: ArModelNode
+  @Inject
+  lateinit var modelNode: ArModelNode
 
-  //view model
+  @Inject
+  lateinit var resources: ApplicationResources
+
+  @Inject
+  lateinit var utils: Utils
+
   private var isObjectPresent = false
 
-  //view model
   private var isPlaneDetected = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    binding = ActivityMainBinding.inflate(layoutInflater)
-    setContentView(binding.root)
-
-    modelNode = ArModelNode(placementMode = INSTANT)
 
     lifecycleScope.launchWhenStarted {
       modelNode.apply {
         loadModel(
           context = applicationContext,
           glbFileLocation = "models/FiatPunto.glb",
-          autoAnimate = true,
+          autoAnimate = false,
           autoScale = true,
           centerOrigin = null
         )
-        scale(0.5f)
+        scale(0.25f)
         placementPosition = Float3(0.0f, 0.0f, -1.0f)
       }
     }
@@ -61,11 +62,11 @@ class MainActivity : AppCompatActivity() {
       true -> {
         binding.objectButton.visibility = View.VISIBLE
         isPlaneDetected = true
-        binding.planeIndicator.setBackgroundColor(Color.GREEN)
+        binding.planeIndicator.setImageResource(resources.green())
       }
       false -> {
         isPlaneDetected = false
-        binding.planeIndicator.setBackgroundColor(Color.RED)
+        binding.planeIndicator.setImageResource(resources.red())
       }
     }
   }
@@ -78,36 +79,38 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun placeObject() {
-    if (isPlaneDetected) {
-      binding.sceneView.addChild(modelNode)
-      modelNode.anchor()
-      binding.objectButton.text = "Remove"
-      isObjectPresent = true
-    } else {
-      Toast
-        .makeText(applicationContext, "Touch plane on the screen to help detect it.", Toast.LENGTH_LONG)
-        .show()
+    when (isPlaneDetected) {
+      true -> {
+        binding.sceneView.addChild(modelNode)
+        modelNode.anchor()
+        binding.objectButton.text = resources.removeButtonText()
+        isObjectPresent = true
+      }
+      false -> {
+        Toast.makeText(
+          applicationContext, resources.noPlaneMessage(), Toast.LENGTH_LONG)
+          .show()
+      }
     }
   }
 
   private fun removeObject() {
     binding.sceneView.removeChild(modelNode)
     modelNode.destroy()
-    binding.objectButton.text = "Place the object"
+    binding.objectButton.text = resources.placeObjectButton()
     isObjectPresent = false
   }
 
   private fun colorButtonClicked(button: View) {
-    ViewCopier.copyViewToBitmap(
+    utils.copyViewToBitmap(
       view = binding.sceneView,
       onSuccess = { bitmap ->
-        val color = bitmap.scale(1, 1).getColor(0, 0).toArgb()
+        val color = utils.calculateAverageColor(bitmap)
         button.setBackgroundColor(color)
       },
       onError = {
-        //todo
+        Log.e("MainActivity", "Error during screen copping")
       }
     )
   }
-
 }

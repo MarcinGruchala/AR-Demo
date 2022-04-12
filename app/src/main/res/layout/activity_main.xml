@@ -21,23 +21,26 @@
 
     <com.google.android.material.button.MaterialButton
       android:id="@+id/object_button"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginBottom="8dp"
-      android:text="Place the object"
+      android:layout_marginHorizontal="70dp"
+      android:text="@string/place_object_button"
       android:visibility="gone"
       app:layout_constraintBottom_toTopOf="@+id/color_button"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent" />
+      app:layout_constraintStart_toStartOf="parent"
+      tools:visibility="visible" />
 
-    <com.google.android.material.button.MaterialButton
+    <ImageView
       android:id="@+id/plane_indicator"
-      android:layout_width="30dp"
-      android:layout_height="30dp"
+      android:layout_width="20dp"
+      android:layout_height="20dp"
       android:layout_margin="10dp"
-      android:backgroundTint="@color/red"
+      android:src="@color/red"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="parent"
+      android:contentDescription= "@string/plane_indicator" />
 
 
     <com.google.android.material.button.MaterialButton
@@ -45,7 +48,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="16dp"
-      android:text="Average color"
+      android:text="@string/average_color_button"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />

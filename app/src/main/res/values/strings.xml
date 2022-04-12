@@ -1,3 +1,8 @@
 <resources>
   <string name="app_name">AR Demo</string>
+  <string name="average_color_button">Average color</string>
+  <string name="plane_indicator">plane_indicator</string>
+  <string name="no_plane_message">Touch plane on the screen to help detect it.</string>
+  <string name="place_object_button">Place the object</string>
+  <string name="remove_button">Remove</string>
 </resources>

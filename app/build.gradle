@@ -1,6 +1,8 @@
 plugins {
   id 'com.android.application'
   id 'org.jetbrains.kotlin.android'
+  id 'kotlin-kapt'
+  id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -37,6 +39,11 @@ android {
 
 dependencies {
 
+  //hilt
+  implementation("com.google.dagger:hilt-android:2.40.5")
+  kapt("com.google.dagger:hilt-android-compiler:2.38.1")
+
+  //ar scene
   implementation 'io.github.sceneview:arsceneview:0.3.0'
 
   implementation 'androidx.core:core-ktx:1.7.0'
