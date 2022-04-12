@@ -28,6 +28,6 @@ object MainActivityModule {
     ArModelNode(placementMode = INSTANT)
 
   @Provides
-  fun viewCopier(): ViewCopier = ViewCopier()
+  fun viewCopier(): Utils = Utils()
 
 }

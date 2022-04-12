@@ -1,9 +1,9 @@
 package com.ardemo
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.core.graphics.scale
 import androidx.lifecycle.lifecycleScope
 import com.ardemo.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +25,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
   lateinit var resources: ApplicationResources
 
   @Inject
-  lateinit var viewCopier: ViewCopier
+  lateinit var utils: Utils
 
   private var isObjectPresent = false
 
@@ -39,11 +39,11 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
         loadModel(
           context = applicationContext,
           glbFileLocation = "models/FiatPunto.glb",
-          autoAnimate = true,
+          autoAnimate = false,
           autoScale = true,
           centerOrigin = null
         )
-        scale(0.5f)
+        scale(0.25f)
         placementPosition = Float3(0.0f, 0.0f, -1.0f)
       }
     }
@@ -79,16 +79,18 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
   }
 
   private fun placeObject() {
-    if (isPlaneDetected) {
-      binding.sceneView.addChild(modelNode)
-      modelNode.anchor()
-      binding.objectButton.text = resources.removeButtonText()
-      isObjectPresent = true
-    } else {
-      Toast
-        .makeText(applicationContext, resources.noPlaneMessage(),
-          Toast.LENGTH_LONG)
-        .show()
+    when (isPlaneDetected) {
+      true -> {
+        binding.sceneView.addChild(modelNode)
+        modelNode.anchor()
+        binding.objectButton.text = resources.removeButtonText()
+        isObjectPresent = true
+      }
+      false -> {
+        Toast.makeText(
+          applicationContext, resources.noPlaneMessage(), Toast.LENGTH_LONG)
+          .show()
+      }
     }
   }
 
@@ -100,16 +102,15 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>() {
   }
 
   private fun colorButtonClicked(button: View) {
-    viewCopier.copyViewToBitmap(
+    utils.copyViewToBitmap(
       view = binding.sceneView,
       onSuccess = { bitmap ->
-        val color = bitmap.scale(1, 1).getColor(0, 0).toArgb()
+        val color = utils.calculateAverageColor(bitmap)
         button.setBackgroundColor(color)
       },
       onError = {
-        //todo
+        Log.e("MainActivity", "Error during screen copping")
       }
     )
   }
-
 }
