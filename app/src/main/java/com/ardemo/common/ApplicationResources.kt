@@ -46,5 +46,9 @@ class ApplicationResources constructor(
     @ColorRes
     fun red(): Int =
         R.color.red
+
+    @ColorRes
+    fun claret(): Int =
+        R.color.claret
 }
 

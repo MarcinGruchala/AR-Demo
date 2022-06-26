@@ -58,8 +58,7 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
     private fun processFrame(frame: ArFrame) {
         when (frame.updatedTrackables.isNotEmpty()) {
             true -> {
-                binding.addObjectButton.visibility = View.VISIBLE
-                binding.anchorObjectButton.visibility = View.VISIBLE
+                binding.objectButtonCard.visibility = View.VISIBLE
                 isPlaneDetected = true
                 binding.planeIndicator.setImageResource(resources.green())
             }
@@ -91,6 +90,7 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
                 binding.sceneView.addChild(modelNode)
                 isObjectPresent = ObjectPlacementState.PLACED
                 binding.addObjectButton.setImageResource(resources.removeObjectIcon())
+                binding.anchorObjectButton.visibility = View.VISIBLE
             }
             false -> {
                 Toast.makeText(
@@ -117,6 +117,7 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
         binding.sceneView.removeChild(modelNode)
         modelNode.destroy()
         isObjectPresent = ObjectPlacementState.NOT_PLACED
+        binding.anchorObjectButton.visibility = View.INVISIBLE
         binding.addObjectButton.setImageResource(resources.addObjectIcon())
     }
 }
