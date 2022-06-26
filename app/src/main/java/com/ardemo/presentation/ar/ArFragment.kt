@@ -51,13 +51,15 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
             processFrame(arFrame)
         }
 
-        binding.objectButton.setOnClickListener(::objectButtonClicked)
+        binding.addObjectButton.setOnClickListener(::addObjectButtonClicked)
+        binding.anchorObjectButton.setOnClickListener(::anchorObjectButtonClicked)
     }
 
     private fun processFrame(frame: ArFrame) {
         when (frame.updatedTrackables.isNotEmpty()) {
             true -> {
-                binding.objectButton.visibility = View.VISIBLE
+                binding.addObjectButton.visibility = View.VISIBLE
+                binding.anchorObjectButton.visibility = View.VISIBLE
                 isPlaneDetected = true
                 binding.planeIndicator.setImageResource(resources.green())
             }
@@ -68,11 +70,18 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
         }
     }
 
-    private fun objectButtonClicked(button: View) {
+    private fun addObjectButtonClicked(button: View) {
         when (isObjectPresent) {
             ObjectPlacementState.NOT_PLACED -> placeObject()
+            else -> removeObject()
+        }
+    }
+
+    private fun anchorObjectButtonClicked(button: View) {
+        when (isObjectPresent) {
             ObjectPlacementState.PLACED -> anchorObject()
-            ObjectPlacementState.ANCHORED -> removeObject()
+            ObjectPlacementState.ANCHORED -> detachObject()
+            ObjectPlacementState.NOT_PLACED -> {}
         }
     }
 
@@ -80,7 +89,6 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
         when (isPlaneDetected) {
             true -> {
                 binding.sceneView.addChild(modelNode)
-                binding.objectButton.text = resources.anchorObjectButton()
                 isObjectPresent = ObjectPlacementState.PLACED
             }
             false -> {
@@ -94,14 +102,17 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
 
     private fun anchorObject() {
         modelNode.anchor()
-        binding.objectButton.text = resources.removeButtonText()
         isObjectPresent = ObjectPlacementState.ANCHORED
+    }
+
+    private fun detachObject() {
+        modelNode.anchor = null
+        isObjectPresent = ObjectPlacementState.PLACED
     }
 
     private fun removeObject() {
         binding.sceneView.removeChild(modelNode)
         modelNode.destroy()
-        binding.objectButton.text = resources.placeObjectButton()
         isObjectPresent = ObjectPlacementState.NOT_PLACED
     }
 }
