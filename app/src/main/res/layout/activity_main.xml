@@ -9,50 +9,20 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-        <io.github.sceneview.ar.ArSceneView
-            android:id="@+id/sceneView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/object_button"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="70dp"
-            android:layout_marginBottom="8dp"
-            android:text="@string/place_object_button"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/color_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:visibility="visible" />
-
-        <ImageView
-            android:id="@+id/plane_indicator"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_margin="10dp"
-            android:contentDescription="@string/plane_indicator"
-            android:src="@color/red"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- AVERAGE COLOR  - move or delete this feature -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/color_button"
-            android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/average_color_button"
+            android:layout_height="0dp"
+            app:defaultNavHost="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/main_nav" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
 
 
