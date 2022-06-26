@@ -43,8 +43,10 @@
             android:contentDescription= "@string/plane_indicator" />
 
 
+        <!-- AVERAGE COLOR  - move or delete this feature -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/color_button"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
