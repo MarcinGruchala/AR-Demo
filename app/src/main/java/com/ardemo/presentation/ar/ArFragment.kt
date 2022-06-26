@@ -90,6 +90,7 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
             true -> {
                 binding.sceneView.addChild(modelNode)
                 isObjectPresent = ObjectPlacementState.PLACED
+                binding.addObjectButton.setImageResource(resources.removeObjectIcon())
             }
             false -> {
                 Toast.makeText(
@@ -103,16 +104,19 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
     private fun anchorObject() {
         modelNode.anchor()
         isObjectPresent = ObjectPlacementState.ANCHORED
+        binding.anchorObjectButton.setImageResource(resources.detachObjectButton())
     }
 
     private fun detachObject() {
         modelNode.anchor = null
         isObjectPresent = ObjectPlacementState.PLACED
+        binding.anchorObjectButton.setImageResource(resources.anchorObjectIcon())
     }
 
     private fun removeObject() {
         binding.sceneView.removeChild(modelNode)
         modelNode.destroy()
         isObjectPresent = ObjectPlacementState.NOT_PLACED
+        binding.addObjectButton.setImageResource(resources.addObjectIcon())
     }
 }
