@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ArFragment">
+        tools:context=".presentation.ar.ArFragment">
 
         <io.github.sceneview.ar.ArSceneView
             android:id="@+id/sceneView"

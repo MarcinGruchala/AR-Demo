@@ -1,4 +1,4 @@
-package com.ardemo.presentation
+package com.ardemo.presentation.ar
 
 import android.content.Context
 import android.content.res.Resources
@@ -8,12 +8,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.FragmentComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.sceneview.ar.node.ArModelNode
 import io.github.sceneview.ar.node.PlacementMode.INSTANT
 
-@[Module InstallIn(ActivityComponent::class)]
-object MainActivityModule {
+@[Module InstallIn(FragmentComponent::class)]
+object ArFragmentModule {
 
   @Provides
   fun resources(

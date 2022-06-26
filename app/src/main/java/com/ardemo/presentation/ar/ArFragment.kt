@@ -1,4 +1,4 @@
-package com.ardemo.presentation
+package com.ardemo.presentation.ar
 
 import android.os.Bundle
 import android.view.View
@@ -26,7 +26,7 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
     @Inject
     lateinit var resources: ApplicationResources
 
-    private var isObjectPresent = false
+    private var isObjectPresent: ObjectPlacementState = ObjectPlacementState.NOT_PLACED
 
     private var isPlaneDetected = false
 
@@ -70,8 +70,9 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
 
     private fun objectButtonClicked(button: View) {
         when (isObjectPresent) {
-            true -> removeObject()
-            false -> placeObject()
+            ObjectPlacementState.NOT_PLACED -> placeObject()
+            ObjectPlacementState.PLACED -> anchorObject()
+            ObjectPlacementState.ANCHORED -> removeObject()
         }
     }
 
@@ -79,9 +80,8 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
         when (isPlaneDetected) {
             true -> {
                 binding.sceneView.addChild(modelNode)
-                modelNode.anchor()
-                binding.objectButton.text = resources.removeButtonText()
-                isObjectPresent = true
+                binding.objectButton.text = resources.anchorObjectButton()
+                isObjectPresent = ObjectPlacementState.PLACED
             }
             false -> {
                 Toast.makeText(
@@ -92,10 +92,16 @@ class ArFragment : BaseBindingFragment<FragmentArBinding>() {
         }
     }
 
+    private fun anchorObject() {
+        modelNode.anchor()
+        binding.objectButton.text = resources.removeButtonText()
+        isObjectPresent = ObjectPlacementState.ANCHORED
+    }
+
     private fun removeObject() {
         binding.sceneView.removeChild(modelNode)
         modelNode.destroy()
         binding.objectButton.text = resources.placeObjectButton()
-        isObjectPresent = false
+        isObjectPresent = ObjectPlacementState.NOT_PLACED
     }
 }

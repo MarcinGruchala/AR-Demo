@@ -16,6 +16,9 @@ class ApplicationResources constructor(
   fun placeObjectButton(): String =
     resources.getString(R.string.place_object_button)
 
+  fun anchorObjectButton(): String =
+    resources.getString(R.string.anchor_object_button)
+
   fun removeButtonText(): String =
     resources.getString(R.string.remove_button)
 
