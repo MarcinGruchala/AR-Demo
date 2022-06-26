@@ -1,4 +1,4 @@
-package com.ardemo
+package com.ardemo.common
 
 import android.graphics.Bitmap
 import android.graphics.Color

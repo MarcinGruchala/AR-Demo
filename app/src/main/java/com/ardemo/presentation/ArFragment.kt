@@ -1,9 +1,12 @@
-package com.ardemo
+package com.ardemo.presentation
 
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.ardemo.R
+import com.ardemo.base.BaseBindingFragment
+import com.ardemo.common.ApplicationResources
 import com.ardemo.databinding.FragmentArBinding
 import dagger.hilt.android.AndroidEntryPoint
 import dev.romainguy.kotlin.math.Float3

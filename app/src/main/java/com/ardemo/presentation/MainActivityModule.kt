@@ -1,7 +1,9 @@
-package com.ardemo
+package com.ardemo.presentation
 
 import android.content.Context
 import android.content.res.Resources
+import com.ardemo.common.ApplicationResources
+import com.ardemo.common.Utils
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

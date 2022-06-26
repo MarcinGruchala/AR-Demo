@@ -1,7 +1,8 @@
-package com.ardemo
+package com.ardemo.common
 
 import android.content.res.Resources
 import androidx.annotation.ColorRes
+import com.ardemo.R
 import dagger.Reusable
 
 @Reusable

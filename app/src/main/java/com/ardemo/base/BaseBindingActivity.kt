@@ -1,4 +1,4 @@
-package com.ardemo
+package com.ardemo.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
